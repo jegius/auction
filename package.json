@@ -1,0 +1,28 @@
+{
+  "name": "auction",
+  "description": "New auction for work with any thinks",
+  "private": true,
+  "scripts": {
+    "start": "live-server"
+  },
+  "dependencies": {
+    "@angular/common": "^5.2.0",
+    "@angular/compiler": "^5.2.0",
+    "@angular/core": "^5.2.0",
+    "@angular/forms": "^5.2.0",
+    "@angular/http": "^5.2.0",
+    "@angular/platform-browser": "^5.2.0",
+    "@angular/platform-browser-dynamic": "^5.2.0",
+    "@angular/router": "^5.2.0",
+    "bootstrap": "~3.3.6",
+    "core-js": "^2.4.1",
+    "jquery": "^3.3.1",
+    "rxjs": "^5.5.6",
+    "systemjs": "^0.19.37",
+    "zone.js": "^0.8.19"
+  },
+  "devDependencies": {
+    "live-server": "^0.8.2",
+    "typescript": "~2.5.3"
+  }
+}
