@@ -12,35 +12,39 @@ import SearchComponent from './components/search/search.component';
 import {ProductService} from './services/product.service';
 import StarsComponent from './components/stars/stars.component';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
+import {ReactiveFormsModule} from '@angular/forms';
+import {FilterPipe} from './components/pipes/filter-pipe';
 
 
 @NgModule({
-    imports: [BrowserModule,
-        RouterModule.forRoot([
-            {
-                path: '',
-                component: HomeComponent
-            },
-            {
-                path: 'products/:prodTitle',
-                component: ProductDetailComponent
-            }
-        ])],
-    declarations: [ApplicationComponent,
-        CarouselComponent,
-        FooterComponent,
-        NavbarComponent,
-        HomeComponent,
-        ProductDetailComponent,
-        ProductItemComponent,
-        SearchComponent,
-        StarsComponent],
-    providers: [ProductService,
-        {
-            provide: LocationStrategy, useClass:
-            HashLocationStrategy
-        }],
-    bootstrap: [ApplicationComponent]
+  imports: [BrowserModule, ReactiveFormsModule,
+    RouterModule.forRoot([
+      {
+        path: '',
+        component: HomeComponent
+      },
+      {
+        path: 'products/:prodTitle',
+        component: ProductDetailComponent
+      }
+    ])],
+  declarations: [
+    ApplicationComponent,
+    CarouselComponent,
+    FooterComponent,
+    NavbarComponent,
+    HomeComponent,
+    ProductDetailComponent,
+    ProductItemComponent,
+    SearchComponent,
+    StarsComponent,
+    FilterPipe],
+  providers: [ProductService,
+    {
+      provide: LocationStrategy, useClass:
+      HashLocationStrategy
+    }],
+  bootstrap: [ApplicationComponent]
 })
 export class AppModule {
 }
