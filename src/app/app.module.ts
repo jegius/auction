@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import {BrowserModule} from '@angular/platform-browser';
 import {RouterModule} from '@angular/router';
 import HomeComponent from './components/home/home.component';
-import ProductDetailComponent from './components/product-detail/product-detail';
+import ProductDetailComponent from './components/product-detail/product-detail.component';
 import ApplicationComponent from './components/application/application.component';
 import CarouselComponent from './components/carousel/carousel.component';
 import FooterComponent from './components/footer/footer.component';
@@ -14,17 +14,17 @@ import StarsComponent from './components/stars/stars.component';
 import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FilterPipe} from './components/pipes/filter-pipe';
-
+import {FormsModule} from '@angular/forms';
 
 @NgModule({
-  imports: [BrowserModule, ReactiveFormsModule,
+  imports: [BrowserModule, ReactiveFormsModule, FormsModule,
     RouterModule.forRoot([
       {
         path: '',
         component: HomeComponent
       },
       {
-        path: 'products/:prodTitle',
+        path: 'products/:productId',
         component: ProductDetailComponent
       }
     ])],

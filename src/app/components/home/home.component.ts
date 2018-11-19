@@ -39,10 +39,3 @@ export default class HomeComponent {
         error => console.error(error));
   }
 }
-const sleepyMan = (man) => {
-  const someHuman = man || {sheep: 0};
-  someHuman.sheep = someHuman.sheep + 1;
-  console.log('Я так хочу спать.. уже прыгнула овечка номер; ', someHuman.sheep);
-  sleepyMan(someHuman);
-};
-sleepyMan();
