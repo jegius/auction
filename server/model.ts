@@ -1,5 +1,3 @@
-import {parseIntAutoRadix} from '@angular/common/src/i18n/format_number';
-
 export class Product {
   constructor(
     public id: number,
@@ -27,9 +25,9 @@ export function getProducts(params = <any>{}): Product[] {
     result = result.filter(
       p => p.title.toLowerCase().indexOf(params.title.toLowerCase()) !== -1);
   }
-  if (parseIntAutoRadix(params.price) && result.length > 0) {
+  if (parseInt(params.price, 10) && result.length > 0) {
     result = result.filter(
-      p => p.price <= parseIntAutoRadix(params.price));
+      p => p.price <= parseInt(params.price, 10));
   }
   if (params.category && result.length > 0) {
     result = result.filter(

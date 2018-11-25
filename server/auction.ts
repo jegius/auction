@@ -1,16 +1,13 @@
 import * as express from 'express';
-import * as compression from 'compression';
 import * as path from 'path';
 import {Server as HttpServer} from 'http';
 import {Server as WsServer} from 'ws';
 import {Product, Review, getProducts, getProductById, getReviewsByProductId} from './model';
-import {parseIntAutoRadix} from '@angular/common/src/i18n/format_number';
 
 // HTTP API
 
 const app = express();
 
-app.use(compression());
 app.use('/', express.static(path.join(__dirname, 'public')));
 
 app.get('/api/products', (req, res) => {
@@ -18,11 +15,11 @@ app.get('/api/products', (req, res) => {
 });
 
 app.get('/api/products/:id', (req, res) => {
-  res.json(getProductById(parseIntAutoRadix(req.params.id)));
+  res.json(getProductById(parseInt(req.params.id, 10)));
 });
 
 app.get('/api/products/:id/reviews', (req, res) => {
-  res.json(getReviewsByProductId(parseIntAutoRadix(req.params.id)));
+  res.json(getReviewsByProductId(parseInt(req.params.id, 10)));
 });
 
 const httpServer: HttpServer = app.listen(8000, 'localhost', () => {
@@ -35,9 +32,9 @@ const httpServer: HttpServer = app.listen(8000, 'localhost', () => {
 // Create the WebSocket server listening to the same port as HTTP server
 const wsServer: WsServer = new WsServer({server: httpServer});
 wsServer.on('connection', ws => {
-  ws.on('message', message => {
+  ws.on('message', (message: string) => {
     const subscriptionRequest = JSON.parse(message);
-    subscribeToProductBids(ws, subscriptionRequest.productId);
+    subscribeToProductBids({client: ws, productId: subscriptionRequest.productId});
   });
 });
 
@@ -51,7 +48,8 @@ setInterval(() => {
 // The map key is a reference to WebSocket connection that represents a user.
 const subscriptions = new Map<any, number[]>();
 
-function subscribeToProductBids(client, productId: number): void {
+function subscribeToProductBids(parameters: { client: any, productId: number }): void {
+  const {client, productId} = parameters;
   const products = subscriptions.get(client) || [];
   subscriptions.set(client, [...products, productId]);
 }
