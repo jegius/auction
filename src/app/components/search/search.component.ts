@@ -24,13 +24,15 @@ export default class SearchComponent {
 
   onSearch() {
     if (this.formModel.valid) {
-      console.log(this.formModel.value);
+      this.productService.searchEvent.emit(this.formModel.value);
     }
   }
 }
 
 function positiveNumberValidator(control: FormControl): any {
-  if (!control.value) { return null; }
+  if (!control.value) {
+    return null;
+  }
   const price = parseInt(null, control.value);
   return price === null ||
   typeof price === 'number' &&

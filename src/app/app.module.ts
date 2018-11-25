@@ -15,9 +15,15 @@ import {HashLocationStrategy, LocationStrategy} from '@angular/common';
 import {ReactiveFormsModule} from '@angular/forms';
 import {FilterPipe} from './components/pipes/filter-pipe';
 import {FormsModule} from '@angular/forms';
+import {ONLINE_AUCTION_SERVICES} from './services/services';
+import {HttpModule} from '@angular/http';
 
 @NgModule({
-  imports: [BrowserModule, ReactiveFormsModule, FormsModule,
+  imports: [
+    BrowserModule,
+    ReactiveFormsModule,
+    HttpModule,
+    FormsModule,
     RouterModule.forRoot([
       {
         path: '',
@@ -39,11 +45,11 @@ import {FormsModule} from '@angular/forms';
     SearchComponent,
     StarsComponent,
     FilterPipe],
-  providers: [ProductService,
-    {
-      provide: LocationStrategy, useClass:
-      HashLocationStrategy
-    }],
+  providers: [
+    ProductService,
+    ONLINE_AUCTION_SERVICES,
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
+    ],
   bootstrap: [ApplicationComponent]
 })
 export class AppModule {

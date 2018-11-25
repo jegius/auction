@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {Product} from '../../services/product.service.api';
-import {ProductService} from '../../services/product.service';
+import {Product, ProductService} from '../../services/product.service';
 import {debounceTime} from 'rxjs/operators';
+import {Observable} from 'rxjs';
 
 @Component({
   selector: 'app-auction-home-page',
@@ -20,13 +20,13 @@ import {debounceTime} from 'rxjs/operators';
       </div>
     </div>
     <div class="row">
-      <div *ngFor="let product of products | filter:'title':filterCriteria" class="col-sm-4 col-lg-4 col-md-4">
+      <div *ngFor="let product of products | async | filter:'title':filterCriteria" class="col-sm-4 col-lg-4 col-md-4">
         <app-auction-product-item [product]="product"></app-auction-product-item>
       </div>
     </div>    `
 })
 export default class HomeComponent {
-  products: Product[] = [];
+  products: Observable<Product[]>;
   titleFilter: FormControl = new FormControl();
   filterCriteria: string;
 

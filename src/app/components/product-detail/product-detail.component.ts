@@ -1,34 +1,66 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
-import {Product} from '../../services/product.service.api';
-import {ProductService, Review} from '../../services/product.service';
+import {Product, ProductService, Review} from '../../services/product.service';
+import {BidService} from '../../services/bid-service';
+import {Subscription} from 'rxjs';
 
 @Component({
   selector: 'app-auction-product-page',
   styles: ['auction-stars.large {font-size: 24px;}'],
   templateUrl: 'product-detail.component.html'
 })
-export default class ProductDetailComponent {
+export default class ProductDetailComponent implements OnDestroy {
   product: Product;
   reviews: Review[];
 
+  currentBid: number;
   newComment: string;
   newRating: number;
 
   isReviewHidden = true;
+  isWatching = false;
 
-  constructor(route: ActivatedRoute, productService: ProductService) {
+  private subscription: Subscription;
 
-    const prodId: number = parseInt(route.snapshot.params['productId']);
-    this.product = productService.getProductById(prodId);
+  constructor(route: ActivatedRoute,
+              productService: ProductService,
+              private bidService: BidService) {
 
-    this.reviews = productService.getReviewsForProduct(this.product.id);
+    const productId = parseInt(route.snapshot.params['productId'], 10);
+
+    productService
+      .getProductById(productId)
+      .subscribe(
+        product => {
+          this.product = product;
+          this.currentBid = product.price;
+        },
+        error => console.error(error));
+
+    productService
+      .getReviewsForProduct(productId)
+      .subscribe(
+        reviews => this.reviews = reviews,
+        error => console.error(error));
+  }
+
+  toggleWatchProduct() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      this.subscription = null;
+      this.isWatching = false;
+    } else {
+      this.isWatching = true;
+      this.subscription = this.bidService.watchProduct(this.product.id)
+        .subscribe(
+          products => this.currentBid = products.find((p: any) => p.productId === this.product.id).bid,
+          error => console.log(error));
+    }
   }
 
   addReview() {
     const review = new Review(0, this.product.id, new Date(), 'Anonymous',
       this.newRating, this.newComment);
-    console.log('Adding review ' + JSON.stringify(review));
     this.reviews = [...this.reviews, review];
     this.product.rating = this.averageRating(this.reviews);
 
@@ -44,5 +76,11 @@ export default class ProductDetailComponent {
     this.newRating = 0;
     this.newComment = null;
     this.isReviewHidden = true;
+  }
+
+  ngOnDestroy(): any {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 }
